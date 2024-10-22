@@ -1,5 +1,6 @@
-// eslint-disable-next-line import/extensions
+/* eslint-disable import/extensions */
 import { Location } from './location'
+import { User } from './user'
 
 interface Booking {
   dateTime: Date
@@ -8,8 +9,10 @@ interface Booking {
 
 export class Schedule {
   schedule: Booking[]
+  user: User
 
-  constructor(schudule: Booking[]) {
+  constructor(schudule: Booking[], user: User) {
     this.schedule = schudule
+    this.user = user
   }
 }
