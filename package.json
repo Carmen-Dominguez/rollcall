@@ -1,0 +1,11 @@
+{
+  "name": "rollcall",
+  "version": "1.0.0",
+  "description": "App used to keep track of employee's location",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Carmen Dominguez",
+  "license": "ISC"
+}
