@@ -32,7 +32,7 @@ app.post('/locations', (req, res) => {
     if (locationController.getLocation(l.name) === undefined) {
       locationController.createLocation(l)
       res.status(201).json({ name: location.name, seats: location.seats })
-    } else res.status(418).json({ error: `${l.name} already exists` })
+    } else res.status(409).json({ error: `${l.name} already exists` })
   } else res.status(422).json({ error: 'wrong data type' })
 })
 
