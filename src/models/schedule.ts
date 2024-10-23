@@ -2,17 +2,17 @@
 import { Location } from './location'
 import { User } from './user'
 
-interface Booking {
+export interface Booking {
   dateTime: Date
   location: Location
 }
 
 export class Schedule {
-  schedule: Booking[]
+  bookings: Booking[]
   user: User
 
-  constructor(schudule: Booking[], user: User) {
-    this.schedule = schudule
+  constructor(bookings: Booking[], user: User) {
+    this.bookings = bookings
     this.user = user
   }
 }
