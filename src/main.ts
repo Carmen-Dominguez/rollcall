@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
 /**
  * This is a sample HTTP server.
@@ -6,33 +7,41 @@
  */
 
 import 'dotenv/config'
-import { createServer, IncomingMessage, ServerResponse } from 'http'
-import { resolve } from 'path'
-import { fileURLToPath } from 'url'
-import { Config } from './config.js'
+import { PORT } from './config.js'
+import express from 'express'
+import { LocationController } from './controllers/location.controller.js'
+import { Location } from './models/location.js'
 
-const nodePath = resolve(process.argv[1])
-const modulePath = resolve(fileURLToPath(import.meta.url))
-const isCLI = nodePath === modulePath
+const app = express()
+const locationController = new LocationController()
 
-export default function main(port: number = Config.port) {
-  const requestListener = (request: IncomingMessage, response: ServerResponse) => {
-    response.setHeader('content-type', 'text/plain;charset=utf8')
-    response.writeHead(200, 'OK')
-    response.end('Olá, Hola, Hello!')
-  }
+app.use(express.json())
 
-  const server = createServer(requestListener)
+app.get('/', (req, res) => {
+  res.send('<h3>Olá, Hola, Hello!</h3>')
+})
 
-  if (isCLI) {
-    server.listen(port)
-    // eslint-disable-next-line no-console
-    console.log(`Listening on port: ${port}`)
-  }
+app.post('/locations', (req, res) => {
+  const location = req.body || {}
 
-  return server
-}
+  // input is correct type
+  if (locationController.isLocation(location)) {
+    // location is new
+    const l: Location = { name: location.name.toLowerCase().trim(), seats: location.seats }
 
-if (isCLI) {
-  main()
-}
+    if (locationController.getLocation(l.name) === undefined) {
+      locationController.createLocation(l)
+      res.status(201).json({ name: location.name, seats: location.seats })
+    } else res.status(409).json({ error: `${l.name} already exists` })
+  } else res.status(422).json({ error: 'wrong data type' })
+})
+
+app.get('/locations', (req, res) => {
+  const locations = locationController.getAllLocations()
+  res.status(200).json(locations)
+})
+
+app.listen(PORT, () => {
+  // eslint-disable-next-line no-console
+  console.log('wassup on', PORT)
+})
