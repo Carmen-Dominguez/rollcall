@@ -9,6 +9,15 @@ export class LocationController {
     this.locations.push(location)
   }
 
+  isLocation(l: Location): l is Location {
+    return (
+      l !== null &&
+      typeof l === 'object' &&
+      typeof l.name === 'string' &&
+      (l.seats === undefined || typeof l.seats === 'number')
+    )
+  }
+
   // R
   getSeats(name: string): 0 {
     return 0
@@ -18,10 +27,21 @@ export class LocationController {
     return this.locations
   }
 
+  getLocation(name: string): Location | undefined {
+    return this.locations.find(l => l.name == name)
+  }
+
   // U
   updateLocation(name: string, seats: number) {
     const n = name
   }
 
   // D
+  // deleteLocation(location: Location) {
+
+  // }
+
+  // deleteAllLocations(location: Location) {
+
+  // }
 }

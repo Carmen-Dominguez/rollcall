@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+/* eslint-disable no-console */
 
 /**
  * This is a sample HTTP server.
@@ -6,13 +7,13 @@
  */
 
 import 'dotenv/config'
-// import { createServer, IncomingMessage, ServerResponse } from 'http'
-// import { resolve } from 'path'
-// import { fileURLToPath } from 'url'
 import { PORT } from './config.js'
 import express from 'express'
+import { LocationController } from './controllers/location.controller.js'
+import { Location } from './models/location.js'
 
 const app = express()
+const locationController = new LocationController()
 
 app.use(express.json())
 
@@ -20,33 +21,27 @@ app.get('/', (req, res) => {
   res.send('<h3>Olá, Hola, Hello!</h3>')
 })
 
+app.post('/locations', (req, res) => {
+  const location = req.body || {}
+
+  // input is correct type
+  if (locationController.isLocation(location)) {
+    // location is new
+    const l: Location = { name: location.name.toLowerCase().trim(), seats: location.seats }
+
+    if (locationController.getLocation(l.name) === undefined) {
+      locationController.createLocation(l)
+      res.status(201).json({ name: location.name, seats: location.seats })
+    } else res.status(418).json({ error: `${l.name} already exists` })
+  } else res.status(422).json({ error: 'wrong data type' })
+})
+
+app.get('/locations', (req, res) => {
+  const locations = locationController.getAllLocations()
+  res.status(201).json(locations)
+})
+
 app.listen(PORT, () => {
   // eslint-disable-next-line no-console
   console.log('wassup on', PORT)
 })
-
-// const nodePath = resolve(process.argv[1])
-// const modulePath = resolve(fileURLToPath(import.meta.url))
-// const isCLI = nodePath === modulePath
-
-// export default function main(port: number = Config.port) {
-//   const requestListener = (request: IncomingMessage, response: ServerResponse) => {
-//     response.setHeader('content-type', 'text/plain;charset=utf8')
-//     response.writeHead(200, 'OK')
-//     response.end('Olá, Hola, Hello!')
-//   }
-
-//   const server = createServer(requestListener)
-
-//   if (isCLI) {
-//     server.listen(port)
-//     // eslint-disable-next-line no-console
-//     console.log(`Listening on port: ${port}`)
-//   }
-
-//   return server
-// }
-
-// if (isCLI) {
-//   main()
-// }
