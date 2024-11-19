@@ -21,6 +21,7 @@ app.get('/', (req, res) => {
   res.send('<h3>Olá, Hola, Hello!</h3>')
 })
 
+// locations
 app.post('/locations', (req, res) => {
   const location = req.body || {}
 
@@ -39,6 +40,26 @@ app.post('/locations', (req, res) => {
 app.get('/locations', (req, res) => {
   const locations = locationController.getAllLocations()
   res.status(200).json(locations)
+})
+
+// schedule
+
+// users
+app.post('/users', (req, res) => {
+  // const user = req.body || {};
+
+  //input is correct type
+  // if () {}
+
+  res.status(201)
+})
+
+app.get('/users', (req, res) => {
+  res.status(200)
+})
+
+app.get('/users/:userid', (req, res) => {
+  res.status(200)
 })
 
 app.listen(PORT, () => {
