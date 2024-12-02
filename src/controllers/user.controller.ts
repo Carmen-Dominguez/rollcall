@@ -22,7 +22,7 @@ export class userController {
   }
 
   // Update
-  updateUser(user: any) {
+  updateUser(user: User) {
     const updatedUsers = this.users.map(u => {
       if (u.userName === user.userName) {
         return { ...u, ...user }
@@ -35,5 +35,13 @@ export class userController {
   }
 
   // Delete
-  // deleteUser() {}
+  deleteUser(targetUser: User) {
+    const user = this.users.find(u => u.userName === targetUser.userName) ?? null
+
+    if (user) {
+      this.users = this.users.filter(obj => obj.userName !== targetUser.userName)
+      return this.users
+    }
+    return null
+  }
 }
