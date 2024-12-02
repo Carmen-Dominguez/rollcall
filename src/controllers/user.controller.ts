@@ -1,6 +1,6 @@
 import { User } from 'src/models/user'
 
-export class userController {
+export class UserController {
   users: User[] = []
 
   // Create
@@ -43,5 +43,15 @@ export class userController {
       return this.users
     }
     return null
+  }
+
+  isUser(u: User): u is User {
+    return (
+      u !== null &&
+      typeof u === 'object' &&
+      typeof u.userName === 'string' &&
+      typeof u.email === 'string' &&
+      (u.role === 'employee' || u.role === 'admin')
+    )
   }
 }
